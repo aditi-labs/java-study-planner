@@ -1,9 +1,9 @@
-import java.util.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.*;
 public class taskList {
     private List<Task> tasks = new ArrayList<>(); 
 
@@ -32,37 +32,72 @@ public class taskList {
         return new ArrayList<>(tasks);
     }
 
-    public void printTasks() {
-        for(Task task : tasks) {
-            System.out.println("Task Name: " + task.getDescription() + " Subject: " + task.getSubject().getName() + ", Due Date: " + task.getDueDate() + ", Time Required: " + task.getTimeRequired() + ", Completed: " + task.isCompleted());
+    public String printTasks() {
+        if (tasks.isEmpty()) return "No tasks.";
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            sb.append("Task Name: ").append(task.getDescription())
+            .append(", Subject: ").append(task.getSubject().getName())
+            .append(", Due Date: ").append(task.getDueDate())
+            .append(", Time Required: ").append(task.getTimeRequired())
+            .append(", Completed: ").append(task.isCompleted())
+            .append("\n");
         }
+        return sb.toString(); 
     }
 
-    public void printTillThisDay(LocalDate date) {
-        for(Task task : tasks) {
-            if(!task.getDueDate().isAfter(date)) {
-                System.out.println("Task Name: " + task.getDescription() + " Subject: " + task.getSubject().getName() + ", Due Date: " + task.getDueDate() + ", Time Required: " + task.getTimeRequired() + ", Completed: " + task.isCompleted());
+    public String printTillThisDay(LocalDate date) {
+        if (tasks.isEmpty()) return "No tasks.";
+
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            if (!task.getDueDate().isAfter(date)) { // dueDate <= date
+                sb.append("Task Name: ").append(task.getDescription())
+                .append(", Subject: ").append(task.getSubject().getName())
+                .append(", Due Date: ").append(task.getDueDate())
+                .append(", Time Required: ").append(task.getTimeRequired())
+                .append(", Completed: ").append(task.isCompleted())
+                .append("\n");
             }
         }
+        return sb.length() == 0 ? "No tasks due on or before " + date + "." : sb.toString();
     }
 
-    public void printSubjectTasks(String subjectName) {
-        for(Task task : tasks) {
-            if(task.getSubject().getName().equals(subjectName)) {
-                System.out.println("Task Name: " + task.getDescription() + " Subject: " + task.getSubject().getName() + ", Due Date: " + task.getDueDate() + ", Time Required: " + task.getTimeRequired() + ", Completed: " + task.isCompleted());
+    public String printSubjectTasks(String subjectName) {
+        if (tasks.isEmpty()) return "No tasks.";
+
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            if (task.getSubject().getName().equalsIgnoreCase(subjectName)) {
+                sb.append("Task Name: ").append(task.getDescription())
+                .append(", Subject: ").append(task.getSubject().getName())
+                .append(", Due Date: ").append(task.getDueDate())
+                .append(", Time Required: ").append(task.getTimeRequired())
+                .append(", Completed: ").append(task.isCompleted())
+                .append("\n");
             }
         }
+        return sb.length() == 0 ? "No tasks found for subject: " + subjectName + "." : sb.toString();
     }
 
-    public void printIncompleteTasks() {
-        for(Task task : tasks) {
-            if(!task.isCompleted()) {
-                System.out.println("Description: " + task.getDescription() + " Subject: " + task.getSubject().getName() + ", Due Date: " + task.getDueDate() + ", Time Required: " + task.getTimeRequired() + ", Completed: " + task.isCompleted());
+    public String printIncompleteTasks() {
+        if (tasks.isEmpty()) return "No tasks.";
+
+        StringBuilder sb = new StringBuilder();
+        for (Task task : tasks) {
+            if (!task.isCompleted()) {
+                sb.append("Task Name: ").append(task.getDescription())
+                .append(", Subject: ").append(task.getSubject().getName())
+                .append(", Due Date: ").append(task.getDueDate())
+                .append(", Time Required: ").append(task.getTimeRequired())
+                .append(", Completed: ").append(task.isCompleted())
+                .append("\n");
             }
         }
+        return sb.length() == 0 ? "No incomplete tasks!!" : sb.toString();
     }
 
-    public void printSubjectSummary(String subjectName) {
+    public String printSubjectSummary(String subjectName) {
         double totalTime = 0;
         double numTasks = 0; 
         for(Task task : tasks) {
@@ -71,7 +106,7 @@ public class taskList {
                 numTasks++;
             }
         }
-        System.out.println("Total time required for subject " + subjectName + ": " + totalTime + " hours for " + numTasks + " tasks.");
+        return "Total time required for subject " + subjectName + ": " + totalTime + " hours for " + numTasks + " tasks.";
     }
 
 
@@ -82,8 +117,9 @@ public class taskList {
                 String taskName = task.getDescription(); // or getName() if you have that
                 String dueDateStr = task.getDueDate().toString(); // ISO: YYYY-MM-DD
                 double timeRequired = task.getTimeRequired();
+                boolean completed = task.isCompleted();
 
-                String line = subjectName + "|" + taskName + "|" + dueDateStr + "|" + timeRequired;
+                String line = subjectName + "|" + taskName + "|" + dueDateStr + "|" + timeRequired + "|" + completed;
                 out.println(line);
             }
             System.out.println("Tasks saved to file: " + filename);

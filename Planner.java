@@ -1,5 +1,5 @@
-import java.util.*; 
 import java.time.LocalDate;
+import java.util.*;
 public class Planner {
     public static void main(String[] args) {
         taskList myList = new taskList();
@@ -39,40 +39,47 @@ public class Planner {
                     System.out.println("Task Added Successfully!");
                     break;
                 case 2:
-                    myList.printTasks();
+                    System.out.println(myList.printTasks());
                     break;
                 case 3:
                     System.out.println("Enter Task Name to Remove:");
                     String taskName = input.next();
-                    for(Task task : myList.getTasks()) {
-                        if(task.getDescription().equals(taskName)) {
+
+                    boolean foundRemove = false;
+                    for (Task task : myList.getTasks()) {
+                        if (task.getDescription().equals(taskName)) {
                             myList.removeTask(myList.getTasks().indexOf(task));
+                            foundRemove = true;
                             System.out.println("Task Removed Successfully!");
                             break;
                         }
-
                     }
-                    System.out.println("Task Not Found. Task not removed.");
+
+                    if (!foundRemove) {
+                        System.out.println("Task Not Found. Task not removed.");
+                    }
                     break;
                 case 4:
                     System.out.println("Enter Date (YYYY-MM-DD):");
                     String dateStr = input.next();
                     LocalDate date = LocalDate.parse(dateStr);
-                    myList.printTillThisDay(date);
+                    System.out.println(myList.printTillThisDay(date));
                     break;
                 case 5:
                     System.out.println("Enter Subject Name:");
                     String subName = input.next();
-                    myList.printSubjectTasks(subName);
+                    System.out.println(myList.printSubjectTasks(subName));
                     break;
                 case 6:
-                    myList.printIncompleteTasks();
+                    System.out.println(myList.printIncompleteTasks());
                     break;
                 case 7:
                     System.out.println("Enter Task Name to Edit:");
                     String editTaskName = input.next();
-                    for(Task task : myList.getTasks()) {
-                        if(task.getDescription().equals(editTaskName)) {
+
+                    boolean foundEdit = false;
+                    for (Task task : myList.getTasks()) {
+                        if (task.getDescription().equals(editTaskName)) {
                             System.out.println("Enter New Task Name:");
                             String newName = input.next();
                             task.setDescription(newName);
@@ -86,23 +93,33 @@ public class Planner {
                             double newTimeRequired = input.nextDouble();
                             task.setTimeRequired(newTimeRequired);
 
+                            foundEdit = true;
                             System.out.println("Task Edited Successfully!");
                             break;
                         }
                     }
-                    System.out.println("Task Not Found. Task not edited.");
+
+                    if (!foundEdit) {
+                        System.out.println("Task Not Found. Task not edited.");
+                    }
                     break;
                 case 8:
                     System.out.println("Enter Task Name to Mark as Completed:");
                     String completedTaskName = input.next();
-                    for(Task task : myList.getTasks()) {
-                        if(task.getDescription().equals(completedTaskName)) {
+
+                    boolean foundComplete = false;
+                    for (Task task : myList.getTasks()) {
+                        if (task.getDescription().equals(completedTaskName)) {
                             task.setCompleted(true);
+                            foundComplete = true;
                             System.out.println("Task Marked as Completed Successfully!");
                             break;
                         }
                     }
-                    System.out.println("Task Not Found. Task not marked as completed.");
+
+                    if (!foundComplete) {
+                        System.out.println("Task Not Found. Task not marked as completed.");
+                    }
                     break;
                 case 9:
                     System.out.println("Exiting Planner. Good Luck Studying!");
